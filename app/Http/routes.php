@@ -1,4 +1,8 @@
 <?php
+
+use App\Models\Productos;
+use App\Models\Procedimientos;
+use App\Models\Diagnosticos;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -9,53 +13,62 @@ Route::get('/', function () {
 
 Route::group(["prefix" => "v1",], function(){
                 
+    /* GENERAR TOKEN */
+    Route::group(["prefix"=>"token"], function(){
+        Route::get('generate', 'AuthController@login');
+    });
     
-    /* Route::group(["prefix" => "session"], function(){
-        
-        Route::get('', 'AuthController@login');
-    }); */
-
-    /* Route::get('token', function(){
-        $credentials = request(['email', 'password']);
-
-        if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        return $this->respondWithToken($token);
-    }); */
-    
-    /* --/PRODUCTOS */
+    /* --/productos */
     Route::group(["middleware" => "auth.jwt","prefix" => "productos"],function(){
 
         // -- /productos?cantidad={int}
         Route::get('',function(Request $request){
             $_cantidad = $request->cantidad;
-            if(is_numeric($_cantidad)){
-                $productos = DB::table('productos')->take($_cantidad)->get();
-                return response()->json([
-                    'total_registers' => count($productos),
-                    'data' => $productos
-                ]);
-            }else{
-                return response()->json([
-                    'message' => "La cantidad '$_cantidad' no es valida."
-                ],500);
-            }
+            $objProducto = new Productos();
+            return $objProducto->getProductosCantidad($_cantidad);
         });
 
         // -- /productos/all
         Route::get('all',function(){
-            $productos = DB::table('productos')->get();
-            return response()->json([
-                'data' => $productos,
-                'total_registers' => count($productos)
-            ]);
+            $objProducto = new Productos();
+            return $objProducto->getProductosAll();
         });
 
     });
-    /* PROCEDIMIENTOS */
+
+    /* --/procedimientos */
+    Route::group(["middleware" => "auth.jwt","prefix" => "procedimientos"],function(){
+
+        // -- /procedimientos?cantidad={int}
+        Route::get('',function(Request $request){
+            $_cantidad = $request->cantidad;
+            $objProcedimientos = new Procedimientos();
+            return $objProcedimientos->getProcedimientosCantidad($_cantidad);
+        });
+
+        // -- /procedimientos/all
+        Route::get('all',function(){
+            $objProcedimientos = new Procedimientos();
+            return $objProcedimientos->getProcedimientosAll();
+        });
+
+    });
 
     /* DIAGNOSTICOS */
+    Route::group(["middleware" => "auth.jwt","prefix" => "diagnosticos"],function(){
+
+        // -- /diagnosticos?cantidad={int}
+        Route::get('',function(Request $request){
+            $_cantidad = $request->cantidad;
+            $objProcedimientos = new Diagnosticos();
+            return $objProcedimientos->getDiagnosticosCantidad($_cantidad);
+        });
+
+        // -- /diagnosticos/all
+        Route::get('all',function(){
+            $objProcedimientos = new Diagnosticos();
+            return $objProcedimientos->getDiagnosticosAll();
+        });
+
+    });
 });
-Route::get('token', 'AuthController@login');
