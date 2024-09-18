@@ -14,9 +14,15 @@ class Diagnosticos extends Model
                     ->select(
                         'id as diagnostico_id',
                         'nombre as diagnostico_nombre',
-                        'genero as diagnostico_genero',
-                        'estado as diagnostico_estado')
+                        DB::raw(
+                            "CASE
+                                WHEN genero = 1 THEN 'HOMBRE'
+                                WHEN genero = 2 THEN 'MUJER'
+                                WHEN genero = 3 THEN 'AMBOS'
+                            END as diagnostico_genero"
+                        ))
                     ->orderByRaw('id ASC')
+                    ->where('estado',1)
                     ->take($cantidad)
                     ->get();
             return response()->json([
@@ -35,9 +41,15 @@ class Diagnosticos extends Model
                 ->select(
                     'id as diagnostico_id',
                     'nombre as diagnostico_nombre',
-                    'genero as diagnostico_genero',
-                    'estado as diagnostico_estado')
+                    DB::raw(
+                        "CASE
+                            WHEN genero = 1 THEN 'HOMBRE'
+                            WHEN genero = 2 THEN 'MUJER'
+                            WHEN genero = 3 THEN 'AMBOS'
+                        END as diagnostico_genero"
+                    ))
                 ->orderByRaw('id ASC')
+                ->where('estado',1)
                 ->get();
         return response()->json([
             'total_registros' => count($productos),
