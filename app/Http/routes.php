@@ -13,11 +13,16 @@ Route::get('/', function () {
 
 Route::group(["prefix" => "v1",], function(){
                 
+    Route::group(["prefix"=>"create"], function(){
+        Route::post('user', 'AuthController@create');
+    });
+
     /* GENERAR TOKEN */
     Route::group(["prefix"=>"token"], function(){
         Route::get('generate', 'AuthController@login');
     });
-    
+
+
     /* --/productos */
     Route::group(["middleware" => "auth.jwt","prefix" => "productos"],function(){
 
@@ -71,4 +76,5 @@ Route::group(["prefix" => "v1",], function(){
         });
 
     });
+
 });

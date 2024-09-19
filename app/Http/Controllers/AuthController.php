@@ -1,14 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\User;
-use Validator;
+use App\UserApi;
+/* use Validator; */
+use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Tymon\JWTAuth\Facades\JWTAuth;
+
+use function Stringy\create;
 
 class AuthController extends Controller
 {
@@ -23,7 +26,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth.jwt', ['except' => 'login']);
+        $this->middleware('auth.jwt', ['except' => ['create', 'login']]);
     }
 
     /**
@@ -35,9 +38,8 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
+            'email' => 'required|email|max:255|unique:users_api_masters',
+            'password' => 'required',
         ]);
     }
 
@@ -45,15 +47,23 @@ class AuthController extends Controller
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
-     * @return User
+     * @return UserApi
      */
-    protected function create(array $data)
+    public function create(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+        $validation = $this->validator($request->all());
+
+        if($validation->fails()){
+            return response()->json($validation->errors(),400);
+        }
+        UserApi::create([
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
         ]);
+        return response()->json([
+            "message" => "User created succesfully"
+        ],201);   
+            
     }
     /* se agrega */
     public function login(Request $request)
