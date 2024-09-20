@@ -17,64 +17,84 @@ Route::group(["prefix" => "v1",], function(){
         Route::post('user', 'AuthController@create');
     });
 
-    /* GENERAR TOKEN */
+    /*          /v1/token       */
     Route::group(["prefix"=>"token"], function(){
+        // ---  /v1/token/generate
         Route::get('generate', 'AuthController@login');
     });
 
 
-    /* --/productos */
+    /* --      /v1/productos        */
     Route::group(["middleware" => "auth.jwt","prefix" => "productos"],function(){
 
-        // -- /productos?cantidad={int}
-        Route::get('',function(Request $request){
-            $_cantidad = $request->cantidad;
-            $objProducto = new Productos();
-            return $objProducto->getProductosCantidad($_cantidad);
-        });
+        // --   /v1/productos?cantidad={int}
+        Route::get('', 'ProductoController@getProductosByCantidad');
 
-        // -- /productos/all
-        Route::get('all',function(){
-            $objProducto = new Productos();
-            return $objProducto->getProductosAll();
-        });
+        // --   /v1/productos/all
+        Route::get('all','ProductoController@getProductosAll');
 
     });
 
-    /* --/procedimientos */
+    /* --       /v1/procedimientos      */
     Route::group(["middleware" => "auth.jwt","prefix" => "procedimientos"],function(){
 
-        // -- /procedimientos?cantidad={int}
-        Route::get('',function(Request $request){
-            $_cantidad = $request->cantidad;
-            $objProcedimientos = new Procedimientos();
-            return $objProcedimientos->getProcedimientosCantidad($_cantidad);
-        });
+        // --   /v1/procedimientos?cantidad={int}
+        Route::get('','ProcedimientoController@getProcedimientosByCantidad');
 
-        // -- /procedimientos/all
-        Route::get('all',function(){
-            $objProcedimientos = new Procedimientos();
-            return $objProcedimientos->getProcedimientosAll();
-        });
+        // -- /v1/procedimientos/all
+        Route::get('all','ProcedimientoController@getProcedimientosAll');
 
     });
 
     /* DIAGNOSTICOS */
     Route::group(["middleware" => "auth.jwt","prefix" => "diagnosticos"],function(){
 
-        // -- /diagnosticos?cantidad={int}
-        Route::get('',function(Request $request){
-            $_cantidad = $request->cantidad;
-            $objProcedimientos = new Diagnosticos();
-            return $objProcedimientos->getDiagnosticosCantidad($_cantidad);
-        });
+        // -- /v1/diagnosticos?cantidad={int}
+        Route::get('','DiagnosticoController@getDiagnosticosByCantidad');
 
-        // -- /diagnosticos/all
-        Route::get('all',function(){
-            $objProcedimientos = new Diagnosticos();
-            return $objProcedimientos->getDiagnosticosAll();
-        });
+        // -- /v1/diagnosticos/all
+        Route::get('all','DiagnosticoController@getDiagnosticosAll');
 
     });
 
+    /* Route::group(["prefix" => "was"],function(){
+
+
+        Route::get('',function(){
+            return response()->stream(function () {
+
+                $i = 0;
+                
+                while (true) {
+
+                    $i++;
+                    $productos = 
+                DB::table('productos')
+                    ->select(
+                        'id as producto_id',
+                        'codigo as producto_codigo',
+                        'nombre as producto_nombre',
+                        'petitorio as producto_petitorio',
+                        'precio_trama as producto_precio_trama')
+                    ->orderByRaw('id ASC')
+                    ->take($i)
+                    ->get();
+
+                    echo "data:" . json_encode([
+                        'total_registros' => count($productos),
+                        'data' => $productos
+                    ]) . "\n\n";   // Datos enviados
+                    ob_flush();
+                    flush();
+                    sleep(5);  // Enviar cada 5 segundos
+                }
+            }, 200, [
+                
+                'Content-Type' => 'text/event-stream',
+                'Cache-Control' => 'no-cache',
+                'Connection' => 'keep-alive',
+            ]);
+        });
+
+    }); */
 });

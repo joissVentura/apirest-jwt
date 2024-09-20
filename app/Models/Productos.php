@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 class Productos extends Model
 {
-    public function getProductosCantidad($cantidad){
-        if(is_numeric($cantidad)){
+    public function getProductosByCantidad($cantidad_int){
             $productos = 
                 DB::table('productos')
                     ->select(
@@ -18,17 +17,9 @@ class Productos extends Model
                         'petitorio as producto_petitorio',
                         'precio_trama as producto_precio_trama')
                     ->orderByRaw('id ASC')
-                    ->take($cantidad)
+                    ->take($cantidad_int)
                     ->get();
-            return response()->json([
-                'total_registros' => count($productos),
-                'data' => $productos
-            ],200);
-        }else{
-            return response()->json([
-                'message' => "La cantidad '$cantidad' no es valida."
-            ],400);
-        }
+            return $productos;
     }
     public function getProductosAll(){
         $productos =  
@@ -41,9 +32,6 @@ class Productos extends Model
                     'precio_trama as producto_precio_trama')
                 ->orderByRaw('id ASC')
                 ->get();
-        return response()->json([
-            'total_registros' => count($productos),
-            'data' => $productos
-        ],200);
+        return $productos;
     }
 }
