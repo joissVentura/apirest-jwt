@@ -46,7 +46,7 @@ Route::group(["prefix" => "v1",], function(){
 
     });
 
-    /* DIAGNOSTICOS */
+    /* --       /v1/diagnosticos      */
     Route::group(["middleware" => "auth.jwt","prefix" => "diagnosticos"],function(){
 
         // -- /v1/diagnosticos?cantidad={int}
@@ -57,6 +57,16 @@ Route::group(["prefix" => "v1",], function(){
 
     });
 
+    /* --       /v1/medicos      */
+    Route::group(["middleware" => "auth.jwt","prefix" => "medicos"],function(){
+
+        // -- /v1/medicos?cantidad={int}
+        Route::get('','MedicoController@getMedicosByCantidad');
+
+        // -- /v1/medicos/all
+        Route::get('all','MedicoController@getMedicosAll');
+
+    });
     /* Route::group(["prefix" => "was"],function(){
 
 
