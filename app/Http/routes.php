@@ -13,19 +13,19 @@ Route::get('/', function () {
 
 Route::group(["prefix" => "v1",], function(){
                 
-    Route::group(["prefix"=>"create"], function(){
+    /* Route::group(["prefix"=>"create"], function(){
         Route::post('user', 'AuthController@create');
-    });
+    }); */
 
     /*          /v1/token       */
-    Route::group(["prefix"=>"token"], function(){
+    /* Route::group(["prefix"=>"token"], function(){
         // ---  /v1/token/generate
         Route::get('generate', 'AuthController@login');
-    });
+    }); */
 
 
     /* --      /v1/productos        */
-    Route::group(["middleware" => "auth.jwt","prefix" => "productos"],function(){
+    Route::group([/* "middleware" => "auth.jwt", */"prefix" => "productos"],function(){
 
         // --   /v1/productos?cantidad={int}
         Route::get('', 'ProductoController@getProductosByCantidad');
@@ -36,7 +36,7 @@ Route::group(["prefix" => "v1",], function(){
     });
 
     /* --       /v1/procedimientos      */
-    Route::group(["middleware" => "auth.jwt","prefix" => "procedimientos"],function(){
+    Route::group([/* "middleware" => "auth.jwt", */"prefix" => "procedimientos"],function(){
 
         // --   /v1/procedimientos?cantidad={int}
         Route::get('','ProcedimientoController@getProcedimientosByCantidad');
@@ -47,7 +47,7 @@ Route::group(["prefix" => "v1",], function(){
     });
 
     /* --       /v1/diagnosticos      */
-    Route::group(["middleware" => "auth.jwt","prefix" => "diagnosticos"],function(){
+    Route::group([/* "middleware" => "auth.jwt", */"prefix" => "diagnosticos"],function(){
 
         // -- /v1/diagnosticos?cantidad={int}
         Route::get('','DiagnosticoController@getDiagnosticosByCantidad');
@@ -58,7 +58,7 @@ Route::group(["prefix" => "v1",], function(){
     });
 
     /* --       /v1/medicos      */
-    Route::group(["middleware" => "auth.jwt","prefix" => "medicos"],function(){
+    Route::group([/* "middleware" => "auth.jwt", */"prefix" => "medicos"],function(){
 
         // -- /v1/medicos?cantidad={int}
         Route::get('','MedicoController@getMedicosByCantidad');
