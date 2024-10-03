@@ -38,7 +38,8 @@ class Diagnosticos extends Model
                             WHEN genero = 2 THEN 'MUJER'
                             WHEN genero = 3 THEN 'AMBOS'
                         END as diagnostico_genero"
-                    ))
+                    ),
+                    'm.rne as nro_rne')
                 ->orderByRaw('id ASC')
                 ->where('estado',1)
                 ->get();

@@ -16,6 +16,8 @@ class Productos extends Model
                         'nombre as producto_nombre',
                         'petitorio as producto_petitorio',
                         'precio_trama as producto_precio_trama')
+                    ->where('estado', '1')
+                    ->where('petitorio', 'SI')
                     ->orderByRaw('id ASC')
                     ->take($cantidad_int)
                     ->get();
@@ -30,6 +32,8 @@ class Productos extends Model
                     'nombre as producto_nombre',
                     'petitorio as producto_petitorio',
                     'precio_trama as producto_precio_trama')
+                ->where('estado', '1')
+                ->where('petitorio', 'SI')
                 ->orderByRaw('id ASC')
                 ->get();
         return $productos;

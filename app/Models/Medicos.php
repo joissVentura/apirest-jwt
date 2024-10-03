@@ -21,6 +21,7 @@ class Medicos extends Model
                 'm.nombre as medico_nombre',
                 'm.paterno as medico_apellido_paterno',
                 'm.materno as medico_apellido_materno',
+                'm.rne as medico_nro_rne',
                 DB::raw('CASE WHEN m.id_colegio_profesional = 1 THEN NULL ELSE e.nombre END as medico_especialidad'),
                 'cp.descripcion as medico_colegio',
                 'e2.nombre as medico_establecimiento'
@@ -50,6 +51,7 @@ public function getMedicosAll(){
                 'm.nombre as medico_nombre',
                 'm.paterno as medico_apellido_paterno',
                 'm.materno as medico_apellido_materno',
+                'm.rne as medico_nro_rne',
                 DB::raw('CASE WHEN m.id_colegio_profesional = 1 THEN NULL ELSE e.nombre END as medico_especialidad'),
                 'cp.descripcion as medico_colegio',
                 'e2.nombre as medico_establecimiento'

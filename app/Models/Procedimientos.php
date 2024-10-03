@@ -19,6 +19,7 @@ class Procedimientos extends Model
                         't_nivel2 as procedimiento_t_nivel2',
                         't_nivel1 as procedimiento_t_nivel1'
                         )
+                    ->where('estado', '1')
                     ->orderByRaw('id ASC')
                     ->take($cantidad_int)
                     ->get();
@@ -36,6 +37,7 @@ class Procedimientos extends Model
                         't_nivel2 as procedimiento_t_nivel2',
                         't_nivel1 as procedimiento_t_nivel1'
                         )
+                    ->where('estado', '1')
                     ->orderByRaw('id ASC')
                     ->get();
         return $query_procedimientos;
