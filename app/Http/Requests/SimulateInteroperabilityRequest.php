@@ -35,11 +35,10 @@ class SimulateInteroperabilityRequest extends Request
     {
         return [
             'acceso.usuario.required' => 'El campo usuario es obligatorio.',
-
             'acceso.clave.required' => 'El campo clave es obligatorio.',
 
-            'prestaciones.required' => 'El campo data es obligatorio.',
-            'prestaciones.array' => 'El campo data debe ser un array.',
+            'prestaciones.required' => 'El campo prestaciones es obligatorio.',
+            'prestaciones.array' => 'El campo prestaciones debe ser un array.',
             'prestaciones.min' => 'El campo prestaciones no puede estar vacío, debe contener al menos un elemento.',
             'prestaciones.max' => 'El limite maximo de prestaciones a validar es de :max',
         ];
@@ -47,10 +46,6 @@ class SimulateInteroperabilityRequest extends Request
 
     public function response(array $errors)
     {
-        $flattenedErrors = [];
-        foreach ($errors as $fieldErrors) {
-            $flattenedErrors = array_merge($flattenedErrors, $fieldErrors);
-        }
-        return new JsonResponse(['errores' => $flattenedErrors], 400);
+        return new JsonResponse(['errores_validacion' => $errors], 400);
     }
 }
