@@ -108,3 +108,10 @@ Route::group(["prefix" => "v1",], function(){
 
     }); */
 });
+
+
+Route::group(["prefix" => "/api/v1",], function(){
+    Route::group(["prefix" => "simular-interoperabilidad/masivo"],function(){
+        Route::post('', 'SimulateInteroperabilityController@massive');
+    });
+});
